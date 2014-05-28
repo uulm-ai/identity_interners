@@ -28,13 +28,17 @@ class IdentityInternersTest extends FunSuite {
     val interner: Interner[TestInternable] = IdentityInterners.newStrongIdentityInterner()
     val internable1: IdentityInternable = interner.intern(new TestInternable(1))
     val internable2: IdentityInternable = interner.intern(new TestInternable(1))
-    assertResult(internable2)(internable1)
+    val internable3: IdentityInternable = interner.intern(new TestInternable(2))
+    assert(internable2 === internable1)
+    assert(internable3 !== internable1)
   }
 
   test("Weak interner works") {
     val interner: Interner[TestInternable] = IdentityInterners.newWeakIdentityInterner()
     val internable1: IdentityInternable = interner.intern(new TestInternable(1))
     val internable2: IdentityInternable = interner.intern(new TestInternable(1))
-    assertResult(internable2)(internable1)
+    val internable3: IdentityInternable = interner.intern(new TestInternable(2))
+    assert(internable2 === internable1)
+    assert(internable3 !== internable1)
   }
 }
