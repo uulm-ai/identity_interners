@@ -2,11 +2,11 @@ name := "identity_interners"
 
 organization := "de.uni-ulm"
 
-version := "1.1"
+version := "1.2"
 
 scalaVersion := "2.11.7"
 
-libraryDependencies += "com.google.guava" % "guava" % "16.0.1"
+libraryDependencies += "com.google.guava" % "guava" % "18.0"
 
 libraryDependencies += "com.google.code.findbugs" % "jsr305" % "1.3.9"
 
