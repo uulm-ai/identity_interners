@@ -23,9 +23,9 @@ class TestInternable(val i: Int) extends IdentityInternable {
   override def internableHashCode(): Int = i.hashCode()
 }
 
-class IdentityInternersTest extends FunSuite {
+class IdentityInternerTest extends FunSuite {
   test("Strong interner works") {
-    val interner: Interner[TestInternable] = IdentityInterners.newStrongIdentityInterner()
+    val interner: Interner[TestInternable] = IdentityInterner.newStrongIdentityInterner()
     val internable1: IdentityInternable = interner.intern(new TestInternable(1))
     val internable2: IdentityInternable = interner.intern(new TestInternable(1))
     val internable3: IdentityInternable = interner.intern(new TestInternable(2))
@@ -34,7 +34,7 @@ class IdentityInternersTest extends FunSuite {
   }
 
   test("Weak interner works") {
-    val interner: Interner[TestInternable] = IdentityInterners.newWeakIdentityInterner()
+    val interner: Interner[TestInternable] = IdentityInterner.newWeakIdentityInterner()
     val internable1: IdentityInternable = interner.intern(new TestInternable(1))
     val internable2: IdentityInternable = interner.intern(new TestInternable(1))
     val internable3: IdentityInternable = interner.intern(new TestInternable(2))

@@ -13,10 +13,14 @@ import java.util.concurrent.ConcurrentMap
  *
  * Created by Felix on 28.05.2014.
  */
-object IdentityInterners {
-  def newStrongIdentityInterner[T <: IdentityInternable](): Interner[T] = {
+trait IdentityInterner[T <: IdentityInternable] {
+  def intern(sample: T): T
+}
+
+object IdentityInterner {
+  def newStrongIdentityInterner[T <: IdentityInternable](): IdentityInterner[T] = {
     val map: ConcurrentMap[T, T] = new MapMaker().keyEquivalence(IdentityInternableEquivalence).makeMap()
-    new Interner[T] {
+    new IdentityInterner[T] {
       def intern(sample: T): T = {
         val canonical: T = map.putIfAbsent(checkNotNull(sample), sample)
         if (canonical == null) sample else canonical
@@ -24,8 +28,8 @@ object IdentityInterners {
     }
   }
 
-  def newWeakIdentityInterner[T <: IdentityInternable](): Interner[T] = {
-    new IdentityInterners.WeakIdentityInterner[T]
+  def newWeakIdentityInterner[T <: IdentityInternable](): IdentityInterner[T] = {
+    new IdentityInterner.WeakIdentityInterner[T]
   }
 
   /**
@@ -33,7 +37,7 @@ object IdentityInterners {
    *
    * Created by Felix on 28.05.2014.
    */
-  private class WeakIdentityInterner[T <: IdentityInternable] extends Interner[T] {
+  private class WeakIdentityInterner[T <: IdentityInternable] extends IdentityInterner[T] {
 
     private object Dummy
     private final val map: MapMakerInternalMap[T, Any] = new MapMaker().weakKeys.keyEquivalence(IdentityInternableEquivalence).makeCustomMap()
